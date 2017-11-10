@@ -80,8 +80,8 @@ model = h2o.deeplearning(x=2:938,y = 'ADMISSION',
                          nfolds =10,
                          keep_cross_validation_predictions=TRUE,
                          standardize=TRUE,
-                         activation = 'Maxout',
-                         hidden = c(200,200),
+                         activation = 'Tanh',
+                         hidden = c(100,100),
                          epochs = 100,
                          train_samples_per_iteration = -2,
                          seed=32,
@@ -148,8 +148,22 @@ h2o.auc(best)
 h2o.confsuionMatrix(best)
 
 #alternatively predicting and finding Roc
+
+#modelling with best parameter values
+model2 = h2o.deeplearning(x=2:938,y = 'ADMISSION',
+                         training_frame = as.h2o(training_set),
+                         validation_frame = as.h2o(validation_set),
+                         nfolds =10,
+                         keep_cross_validation_predictions=TRUE,
+                         standardize=TRUE,
+                         activation = 'Maxout',
+                         hidden = c(200,200),
+                         epochs = 100,
+                         train_samples_per_iteration = -2,
+                         seed=32)
+                        
 # Predicting the Test set results
-y_pred = h2o.predict(model, newdata = as.h2o(test_set[-131]))
+y_pred = h2o.predict(model2, newdata = as.h2o(test_set[-131]))
 y_pred.R=as.data.frame(y_pred)
 test_set.R=as.data.frame(test_set)
 head(y_pred.R)
